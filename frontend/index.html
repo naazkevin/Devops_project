@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lifolio - Financial Life OS</title>
+  <style>
+    body { background-color: #0d0d0d; color: #fff; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: #1a1a1a; padding: 2rem; border-radius: 12px; width: 320px; border: 1px solid #333; text-align: center; }
+    .amount { font-size: 2.5rem; color: #ff5533; margin: 10px 0; font-weight: bold; }
+    .metrics { display: flex; justify-content: space-between; margin-top: 20px; font-size: 0.85rem; color: #aaa; }
+    .badge { background: #1b382b; color: #40c057; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">STEADY</span>
+    <p style="color: #888; font-size: 0.8rem; margin-top: 10px;">SAFE TO SPEND • THIS MONTH</p>
+    <div class="amount" id="spend">₹0</div>
+    <p style="font-size: 0.75rem; color: #666;">After EMI, bills, and safety buffer</p>
+    <hr style="border: 0.5px solid #222; margin: 15px 0;">
+    <div class="metrics">
+      <div>RUNWAY<br><strong id="runway" style="color:#fff;">-</strong></div>
+      <div>LIFESCORE<br><strong id="score" style="color:#fff;">-</strong></div>
+      <div>SAVINGS<br><strong id="savings" style="color:#fff;">-</strong></div>
+    </div>
+  </div>
+
+  <script>
+    fetch('http://localhost:5000/api/finance')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('spend').innerText = '₹' + data.safeToSpend.toLocaleString();
+        document.getElementById('runway').innerText = data.runwayMonths + ' mo';
+        document.getElementById('score').innerText = data.lifescore + '/100';
+        document.getElementById('savings').innerText = data.savingsRate;
+      })
+      .catch(err => console.error('API Error:', err));
+  </script>
+</body>
+</html>
