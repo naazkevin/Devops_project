@@ -1,0 +1,36 @@
+name: DevOps CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Backend Dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Build Docker Images
+      run: |
+        docker compose build
+
+    - name: Test Docker Compose Startup
+      run: |
+        docker compose up -d
+        sleep 5
+        curl http://localhost:5000/health
+        docker compose down
