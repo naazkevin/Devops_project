@@ -22,7 +22,7 @@ jobs:
     - name: Install Backend Dependencies
       run: |
         cd backend
-        npm ci
+        npm install
 
     - name: Build Docker Images
       run: |
